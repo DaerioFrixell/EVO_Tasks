@@ -1,20 +1,27 @@
-const object = execution.getVariable('object');
+var object = execution.getVariable('object')
 var block = object.prop("entitiesKndKnoData").elements()
 	.get(0)
 	.prop("regionalAdditionalData")
 	.prop("form")
-	.prop("block");
+	.prop("block")
 
-let riskCategory
+var highCategory = 1
+var middleCategory = 2
+var lowCategory = 3
 
-let m1 = 1 // дтп со смертью из-за тяжкого/среднего вреда
-let m2 = 0 // дтп без смерти, но тяжкий/средний вред
-const highCategory = 1
-const middleCategory = 2
-const lowCategory = 3
+var riskCategory
+var M1 // дтп со смертью из-за тяжкого/среднего вреда
+var M2 // дтп без смерти, но тяжкий/средний вред
 
-function riskCalculation(m1, m2) {
-  const Rt = 20 * m1 + 5 * m2 // показатель риска
+try {
+  M1 = block.prop("M1").value()
+} catch(error) {}
+try {
+  M2 = block.prop("M2").value()
+} catch(error) {}
+
+function riskCalculation(M1, M2) {
+  var Rt = 20 * M1 + 5 * M2 // показатель риска
 
   if (Rt >= 15) {
     return (riskCategory = highCategory)
@@ -29,9 +36,5 @@ function riskCalculation(m1, m2) {
   }
 }
 
-// check
-const check = ""
-
-
-riskCategory = riskCalculation(m1, m2)
+riskCategory = riskCalculation(M1, M2)
 execution.setVariable("riskCategory", riskCategory);
