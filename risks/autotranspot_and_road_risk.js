@@ -1,3 +1,5 @@
+import { regularCartTest } from "./testData.js";
+
 /** ОБОЗНАЧЕНИЕ ПЕРЕМЕННЫХ
  * globalRisk  - НЦОi
  * coeff_severity - коэффициент значитмости показателя тяжести 
@@ -25,7 +27,6 @@
 // 	.prop("block")
 
 // BPMN FOR AUTOTRANSPORT
-
 var AUTOTRANSPORT_risk_category = null
 var globalRisk = null
 var risk_severity = null
@@ -41,31 +42,10 @@ var dtpCount = 0 // через селекты юзер выбирает кол-�
 var regularCart = 0 // через селекты юзер выбирает (the same)
 var insurance = 0 // через селекты юзер устанавливает
 
-
-
 // TESTS DATA
 dtpCount = 1
-regularCart = 75 // countPoints_probability не считается 
+regularCart = 51
 insurance = 100 // countPoints_conscientiousness не считается
-
-function assignSeverityPoints() {
-    if(dtpCount === 0) {
-        countPoints_severity = 0 
-    }
-    if(dtpCount === 1 || dtpCount === 2) {
-        countPoints_severity = 25 
-    }
-    if(dtpCount === 3 || dtpCount === 4) {
-        countPoints_severity = 50
-    }
-    if(dtpCount === 5 || dtpCount === 6) {
-        countPoints_severity = 75 
-    }
-    if(dtpCount < 6) {
-        countPoints_severity = 100 
-    }
-}
-
 
 
 function runMainScope () {    
@@ -77,9 +57,56 @@ function runMainScope () {
     const AUTOTRANSPORT_middleRisk = 2
     const AUTOTRANSPORT_lowRisk = 3
 
+    function assignSeverityPoints(quantity) {
+        if(quantity === 0) {
+            countPoints_severity = 0 
+        }
+
+        if(quantity === 1 || quantity === 2) {
+            countPoints_severity = 25 
+        }
+
+        if(quantity === 3 || quantity === 4) {
+            countPoints_severity = 50
+        }
+
+        if(quantity === 5 || quantity === 6) {
+            countPoints_severity = 75 
+        }
+
+        if(quantity < 6) {
+            countPoints_severity = 100 
+        }
+    }
+
+    function assignProbabilityPoints(quantity) { 
+        console.log("quantity in assign Probability Points: ", quantity)
+        if(quantity < 11) {
+            return  0 
+        }
+
+        if(quantity > 10 && quantity < 51) {
+            return 25 
+        }
+
+        if(quantity > 50 && quantity < 101) {
+            return 50
+        }
+
+        if(quantity > 100 && quantity < 151) {
+            return 75 
+        }
+
+        if(quantity > 150) {
+            return 100 
+        }
+    }
+    
+   
+
     function calculationSeverityRisk (s, cs) {
         risk_severity = s * cs
-        console.log("risk_severity: ", risk_severity)
+        // console.log("risk_severity: ", risk_severity)
         return risk_severity
     }
 
@@ -91,30 +118,34 @@ function runMainScope () {
 
     function calculationConscientiousnessRisk (c, i) {
         risk_conscientiousness = c * i
-        console.log("risk_conscientiousness: ", risk_conscientiousness)
+        // console.log("risk_conscientiousness: ", risk_conscientiousness)
         return risk_conscientiousness
     }
 
     function calculationGlobalRisk (s, p, c) {
         const globalRisk = s + p + c
-        console.log("globalRisk: ", globalRisk)
+        // console.log("globalRisk: ", globalRisk)
     
         if(globalRisk > 75) { 
-            console.log("AUTOTRANSPORT_risk_category - high:",  AUTOTRANSPORT_highRisk)
+            // console.log("AUTOTRANSPORT_risk_category - high:",  AUTOTRANSPORT_highRisk)
             return AUTOTRANSPORT_highRisk
         }
         if(globalRisk  > 45 && globalRisk <= 75 ) {
-            console.log("AUTOTRANSPORT_risk_category - middle:",  AUTOTRANSPORT_middleRisk)
+            // console.log("AUTOTRANSPORT_risk_category - middle:",  AUTOTRANSPORT_middleRisk)
             return AUTOTRANSPORT_middleRisk
         }
         if(globalRisk  < 45  ) {
-            console.log("AUTOTRANSPORT_risk_category - low:",  AUTOTRANSPORT_lowRisk)
+            // console.log("AUTOTRANSPORT_risk_category - low:",  AUTOTRANSPORT_lowRisk)
             return AUTOTRANSPORT_lowRisk
         }
     }
     
+    assignSeverityPoints(dtpCount)
+    countPoints_probability = assignProbabilityPoints(regularCartTest)    
+    console.log("countPoints_probability", countPoints_probability)
+    
     calculationSeverityRisk(coeff_severity, countPoints_severity)
-    calculationProbabilityRisk(coeff_probability, regularCart)
+    calculationProbabilityRisk(coeff_probability, countPoints_probability)
     calculationConscientiousnessRisk(coeff_conscientiousness, insurance)
     AUTOTRANSPORT_risk_category = calculationGlobalRisk(risk_severity, risk_probability, risk_conscientiousness)
 }
