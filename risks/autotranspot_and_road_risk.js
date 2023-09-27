@@ -1,5 +1,3 @@
-import { regularCartTest } from "./testData.js";
-
 /** ОБОЗНАЧЕНИЕ ПЕРЕМЕННЫХ
  * globalRisk  - НЦОi
  * coeff_severity - коэффициент значитмости показателя тяжести 
@@ -38,17 +36,11 @@ var countPoints_severity
 var countPoints_probability
 var countPoints_conscientiousness
 
-var dtpCount = 0 // через селекты юзер выбирает кол-во ДТП, по ним будет присваиваться БАЛЛ
-var regularCart = 0 // через селекты юзер выбирает (the same)
-var insurance = 0 // через селекты юзер устанавливает
+var dtpCount = 6 // через селекты юзер выбирает кол-во ДТП
+var regularCart = 101 // через селекты юзер выбирает количество карт
+var insurance = 1 // через селекты юзер устанавливает
 
-// TESTS DATA
-dtpCount = 1
-regularCart = 51
-insurance = 100 // countPoints_conscientiousness не считается
-
-
-function runMainScope () {    
+function runAutotransportMainScope () {    
     const coeff_severity = 0.5
     const coeff_probability = 0.25
     const coeff_conscientiousness = 0.25
@@ -57,100 +49,50 @@ function runMainScope () {
     const AUTOTRANSPORT_middleRisk = 2
     const AUTOTRANSPORT_lowRisk = 3
 
-    function assignSeverityPoints(quantity) {
-        if(quantity === 0) {
-            countPoints_severity = 0 
-        }
-
-        if(quantity === 1 || quantity === 2) {
-            countPoints_severity = 25 
-        }
-
-        if(quantity === 3 || quantity === 4) {
-            countPoints_severity = 50
-        }
-
-        if(quantity === 5 || quantity === 6) {
-            countPoints_severity = 75 
-        }
-
-        if(quantity < 6) {
-            countPoints_severity = 100 
-        }
+    function assignSeverityPoints(quantity) { \
+        if(quantity === 0) return 0
+        if(quantity === 1 || quantity === 2) return 25
+        if(quantity === 3 || quantity === 4) return 50
+        if(quantity === 5 || quantity === 6) return 75
+        if(quantity > 6) return 100 
     }
 
-    function assignProbabilityPoints(quantity) { 
-        console.log("quantity in assign Probability Points: ", quantity)
-        if(quantity < 11) {
-            return  0 
-        }
-
-        if(quantity > 10 && quantity < 51) {
-            return 25 
-        }
-
-        if(quantity > 50 && quantity < 101) {
-            return 50
-        }
-
-        if(quantity > 100 && quantity < 151) {
-            return 75 
-        }
-
-        if(quantity > 150) {
-            return 100 
-        }
-    }
-    
-   
-
-    function calculationSeverityRisk (s, cs) {
-        risk_severity = s * cs
-        // console.log("risk_severity: ", risk_severity)
-        return risk_severity
+    function assignProbabilityPoints(quantity) {
+        if(quantity < 11) return  0
+        if(quantity > 10 && quantity < 51) return 25
+        if(quantity > 50 && quantity < 101) return 50
+        if(quantity > 100 && quantity < 151) return 75
+        if(quantity > 150) return 100
     }
 
-    function calculationProbabilityRisk (p, r) {
-        risk_probability = p * r
-        console.log("risk_probability: ", risk_probability)
-        return risk_probability
+    function assignConscientiousnessPoints(quantity) {
+        if(quantity === 0) return 0 // наличие страховки
+        if(quantity === 1) return 100 // отсутствие страховки
     }
 
-    function calculationConscientiousnessRisk (c, i) {
-        risk_conscientiousness = c * i
-        // console.log("risk_conscientiousness: ", risk_conscientiousness)
-        return risk_conscientiousness
-    }
+    function calculationSeverityRisk (s, cs) { return risk_severity = s * cs }
+    function calculationProbabilityRisk (p, r) { return risk_probability = p * r }
+    function calculationConscientiousnessRisk (c, i) { return risk_conscientiousness = c * i }
 
     function calculationGlobalRisk (s, p, c) {
-        const globalRisk = s + p + c
-        // console.log("globalRisk: ", globalRisk)
-    
-        if(globalRisk > 75) { 
-            // console.log("AUTOTRANSPORT_risk_category - high:",  AUTOTRANSPORT_highRisk)
-            return AUTOTRANSPORT_highRisk
-        }
-        if(globalRisk  > 45 && globalRisk <= 75 ) {
-            // console.log("AUTOTRANSPORT_risk_category - middle:",  AUTOTRANSPORT_middleRisk)
-            return AUTOTRANSPORT_middleRisk
-        }
-        if(globalRisk  < 45  ) {
-            // console.log("AUTOTRANSPORT_risk_category - low:",  AUTOTRANSPORT_lowRisk)
-            return AUTOTRANSPORT_lowRisk
-        }
+        const globalRisk = s + p + c 
+        if(globalRisk > 75)  return AUTOTRANSPORT_highRisk
+        if(globalRisk  > 45 && globalRisk <= 75 ) return AUTOTRANSPORT_middleRisk
+        if(globalRisk  < 45  ) return AUTOTRANSPORT_lowRisk
     }
     
-    assignSeverityPoints(dtpCount)
-    countPoints_probability = assignProbabilityPoints(regularCartTest)    
-    console.log("countPoints_probability", countPoints_probability)
+    countPoints_severity = assignSeverityPoints(dtpCount)
+    countPoints_probability = assignProbabilityPoints(regularCart)
+    countPoints_conscientiousness = assignConscientiousnessPoints(insurance)
     
     calculationSeverityRisk(coeff_severity, countPoints_severity)
     calculationProbabilityRisk(coeff_probability, countPoints_probability)
-    calculationConscientiousnessRisk(coeff_conscientiousness, insurance)
+    calculationConscientiousnessRisk(coeff_conscientiousness, countPoints_conscientiousness)
+
     AUTOTRANSPORT_risk_category = calculationGlobalRisk(risk_severity, risk_probability, risk_conscientiousness)
 }
 
-runMainScope()
+runAutotransportMainScope()
 
 // градация рисков для "дорог"
 const ROADS_highRisk = 1
