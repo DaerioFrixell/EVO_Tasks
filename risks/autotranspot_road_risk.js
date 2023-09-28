@@ -5,37 +5,38 @@
 // 	.prop("form")
 // 	.prop("block")
 
-//checkboxes
+var AUTOTRANSPORT_risk_category = null
+var ROADS_risk_category = null
+var globalRisk = null
+
+const highRisk = 1
+const significantRisk = 2
+const middleRisk = 3
+const lowRisk = 4
+
+// checkboxes
 var transportRisk = false
 var roadsRisk = false
 
-var AUTOTRANSPORT_risk_category = null
-var ROADS_risk_category = null
-
-var globalRisk = null
 var risk_severity = null
 var risk_probability= null
 var risk_conscientiousness = null
 
-var countPoints_severity
-var countPoints_probability
-var countPoints_conscientiousness
+var countPoints_severity = null
+var countPoints_probability = null
+var countPoints_conscientiousness = null
 
-var dtpCount = 6
-var regularCart = 101
-var insurance = 1
+var dtpCount = 6 // select
+var regularCart = 151 // select
+var insurance = 1 // select
 
 var groupSeverity = "B" // выбирает юзер через селект A, B
-var groupProbability= 4 // выбирает юзер через селект 1, 2, 3, 4
+var groupProbability= 1 // выбирает юзер через селект 1, 2, 3, 4
 
 function runAutotransportMainScope () {    
     const coeff_severity = 0.5
     const coeff_probability = 0.25
-    const coeff_conscientiousness = 0.25
-
-    const AUTOTRANSPORT_highRisk = 1
-    const AUTOTRANSPORT_middleRisk = 2
-    const AUTOTRANSPORT_lowRisk = 3
+    const coeff_conscientiousness = 0.25    
 
     function assignSeverityPoints(quantity) { 
         if(quantity === 0) return 0
@@ -64,9 +65,9 @@ function runAutotransportMainScope () {
 
     function calculationGlobalRisk (s, p, c) {
         const globalRisk = s + p + c 
-        if(globalRisk > 75)  return AUTOTRANSPORT_highRisk
-        if(globalRisk  > 49 && globalRisk <= 75 ) return AUTOTRANSPORT_middleRisk
-        if(globalRisk  < 50  ) return AUTOTRANSPORT_lowRisk
+        if(globalRisk > 75)  return highRisk
+        if(globalRisk  > 49 && globalRisk <= 75 ) return middleRisk
+        if(globalRisk  < 50  ) return lowRisk
     }
     
     countPoints_severity = assignSeverityPoints(dtpCount)
@@ -81,21 +82,15 @@ function runAutotransportMainScope () {
 }
 
 function runRoadMainScope() {
-    function calculationGlobalRisk (s, p) { 
-        const ROADS_highRisk = 1
-        const ROADS_significantRisk = 2
-        const ROADS_middleRisk = 3
-        const ROADS_lowRisk = 4
-    
-        if ((s === "A" || s === "B") && p === 1) return ROADS_highRisk
-        if ((s === "A" || s === "B") && p === 2) return ROADS_significantRisk
-        if ((s === "A" && p > 2) || (s === "B" && p === 3)) return ROADS_middleRisk
-        if (s === "B" && p === 4) return ROADS_lowRisk
+    function calculationGlobalRisk (s, p) {
+        if ((s === "A" || s === "B") && p === 1) return highRisk
+        if ((s === "A" || s === "B") && p === 2) return significantRisk
+        if ((s === "A" && p > 2) || (s === "B" && p === 3)) return middleRisk
+        if (s === "B" && p === 4) return lowRisk
     }
+
+    ROADS_risk_category = calculationGlobalRisk(groupSeverity, groupProbability)
 }
 
-
-ROADS_risk_category = calculationGlobalRisk(groupSeverity, groupProbability)
-
-runRoadMainScope()
-runAutotransportMainScope()
+if (transportRisk)  runAutotransportMainScope()
+if (roadsRisk)  runRoadMainScope()
