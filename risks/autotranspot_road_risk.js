@@ -92,5 +92,13 @@ function runRoadMainScope() {
     ROADS_risk_category = calculationGlobalRisk(groupSeverity, groupProbability)
 }
 
-if (transportRisk)  runAutotransportMainScope()
-if (roadsRisk)  runRoadMainScope()
+if (!transportRisk && !roadsRisk) transportRisk = true
+
+if (transportRisk)  { 
+    roadsRisk = false
+    runAutotransportMainScope()
+}
+if (roadsRisk)  {
+    transportRisk = false
+    runRoadMainScope()
+}
