@@ -1,37 +1,61 @@
-// var object = execution.getVariable('object')
-// var block = object.prop("entitiesKndKnoData").elements()
-// 	.get(0)
-// 	.prop("regionalAdditionalData")
-// 	.prop("form")
-// 	.prop("block")
-
+var object = execution.getVariable('object')
+var block = object.prop("entitiesKndKnoData").elements()
+	.get(0)
+	.prop("regionalAdditionalData")
+	.prop("form")
+	.prop("block")    
+    
 var AUTOTRANSPORT_risk_category = null
 var ROADS_risk_category = null
 var globalRisk = null
+
 
 const highRisk = 1
 const significantRisk = 2
 const middleRisk = 3
 const lowRisk = 4
 
+
+
+let risk_severity = null
+let risk_probability= null
+let risk_conscientiousness = null
+
+let countPoints_severity = null
+let countPoints_probability = null
+let countPoints_conscientiousness = null
+
+var dtpCount = 0
+var regularCart = 0
+var insurance = 0
+var groupSeverity = "" 
+var groupProbability= 0 
+
 // checkboxes
 var transportRisk = false
 var roadsRisk = false
 
-var risk_severity = null
-var risk_probability= null
-var risk_conscientiousness = null
-
-var countPoints_severity = null
-var countPoints_probability = null
-var countPoints_conscientiousness = null
-
-var dtpCount = 6 // select
-var regularCart = 151 // select
-var insurance = 1 // select
-
-var groupSeverity = "B" // выбирает юзер через селект A, B
-var groupProbability= 1 // выбирает юзер через селект 1, 2, 3, 4
+try {
+    transportRisk = block.prop("transportRisk").value()
+} catch(error) {}
+try {
+    roadsRisk = block.prop("roadsRisk").value()
+} catch(error) {}
+try {
+    dtpCount = block.prop("dtpCount").value()
+} catch(error) {}
+try {
+    regularCart = block.prop("regularCart").value()
+} catch(error) {}
+try {
+    insurance = block.prop("insurance").value()
+} catch(error) {}
+try {
+    groupSeverity = block.prop("groupSeverity").value()
+} catch(error) {}
+try {
+    groupProbability = block.prop("groupProbability").value()
+} catch(error) {}
 
 function runAutotransportMainScope () {    
     const coeff_severity = 0.5
@@ -96,9 +120,12 @@ if (!transportRisk && !roadsRisk) transportRisk = true
 
 if (transportRisk)  { 
     roadsRisk = false
-    runAutotransportMainScope()
+    runAutotransportMainScope()    
+    execution.setVariable("riskCategory", AUTOTRANSPORT_risk_category);
 }
+
 if (roadsRisk)  {
     transportRisk = false
-    runRoadMainScope()
+    runRoadMainScope()    
+    execution.setVariable("riskCategory", ROADS_risk_category);
 }
