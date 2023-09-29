@@ -1,3 +1,5 @@
-export const regularCartTest = 151 // корректно работает
-export const dtpCountTest = 6 // корректно работает
-export const insuranceTest = 1 // корректно работает
+export const autotransportRoadsRisk = {
+	regularCartTest: 69,
+	dtpCountTest: 69,
+	insuranceTest: 69,
+}
