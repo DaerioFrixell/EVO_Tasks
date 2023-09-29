@@ -8,22 +8,24 @@ var block = object.prop("entitiesKndKnoData").elements()
 var AUTOTRANSPORT_risk_category = null
 var ROADS_risk_category = null
 var globalRisk = null
+var riskCategory = null
 
+var highRisk = 1
+var significantRisk = 2
+var middleRisk = 3
+var lowRisk = 4
 
-const highRisk = 1
-const significantRisk = 2
-const middleRisk = 3
-const lowRisk = 4
+var risk_severity = null
+var risk_probability= null
+var risk_conscientiousness = null
 
+var countPoints_severity = null
+var countPoints_probability = null
+var countPoints_conscientiousness = null
 
-
-let risk_severity = null
-let risk_probability= null
-let risk_conscientiousness = null
-
-let countPoints_severity = null
-let countPoints_probability = null
-let countPoints_conscientiousness = null
+var coeff_severity = 0.5
+var coeff_probability = 0.25
+var coeff_conscientiousness = 0.25 
 
 var dtpCount = 0
 var regularCart = 0
@@ -34,6 +36,10 @@ var groupProbability= 0
 // checkboxes
 var transportRisk = false
 var roadsRisk = false
+
+try {
+    transportRisk = block.prop("transportRisk").value()
+} catch(error) {}
 
 try {
     transportRisk = block.prop("transportRisk").value()
@@ -56,76 +62,86 @@ try {
 try {
     groupProbability = block.prop("groupProbability").value()
 } catch(error) {}
+   
 
-function runAutotransportMainScope () {    
-    const coeff_severity = 0.5
-    const coeff_probability = 0.25
-    const coeff_conscientiousness = 0.25    
-
-    function assignSeverityPoints(quantity) { 
-        if(quantity === 0) return 0
-        if(quantity === 1 || quantity === 2) return 25
-        if(quantity === 3 || quantity === 4) return 50
-        if(quantity === 5 || quantity === 6) return 75
-        if(quantity > 6) return 100 
-    }
-
-    function assignProbabilityPoints(quantity) {
-        if(quantity < 11) return  0
-        if(quantity > 10 && quantity < 51) return 25
-        if(quantity > 50 && quantity < 101) return 50
-        if(quantity > 100 && quantity < 151) return 75
-        if(quantity > 150) return 100
-    }
-
-    function assignConscientiousnessPoints(quantity) {
-        if(quantity === 0) return 0
-        if(quantity === 1) return 100
-    }
-
-    function calculationSeverityRisk (s, cs) { return risk_severity = s * cs }
-    function calculationProbabilityRisk (p, r) { return risk_probability = p * r }
-    function calculationConscientiousnessRisk (c, i) { return risk_conscientiousness = c * i }
-
-    function calculationGlobalRisk (s, p, c) {
-        const globalRisk = s + p + c 
-        if(globalRisk > 75)  return highRisk
-        if(globalRisk  > 49 && globalRisk <= 75 ) return middleRisk
-        if(globalRisk  < 50  ) return lowRisk
-    }
-    
-    countPoints_severity = assignSeverityPoints(dtpCount)
-    countPoints_probability = assignProbabilityPoints(regularCart)
-    countPoints_conscientiousness = assignConscientiousnessPoints(insurance)
-    
-    calculationSeverityRisk(coeff_severity, countPoints_severity)
-    calculationProbabilityRisk(coeff_probability, countPoints_probability)
-    calculationConscientiousnessRisk(coeff_conscientiousness, countPoints_conscientiousness)
-
-    AUTOTRANSPORT_risk_category = calculationGlobalRisk(risk_severity, risk_probability, risk_conscientiousness)
+function assignSeverityPoints(quantity) { 
+    if(quantity === 0) return 0
+    if(quantity === 1 || quantity === 2) return 25
+    if(quantity === 3 || quantity === 4) return 50
+    if(quantity === 5 || quantity === 6) return 75
+    if(quantity > 6) return 100 
 }
 
-function runRoadMainScope() {
-    function calculationGlobalRisk (s, p) {
-        if ((s === "A" || s === "B") && p === 1) return highRisk
-        if ((s === "A" || s === "B") && p === 2) return significantRisk
-        if ((s === "A" && p > 2) || (s === "B" && p === 3)) return middleRisk
-        if (s === "B" && p === 4) return lowRisk
-    }
+countPoints_severity = assignSeverityPoints(dtpCount)
 
-    ROADS_risk_category = calculationGlobalRisk(groupSeverity, groupProbability)
+
+function assignProbabilityPoints(quantity) {
+    if(quantity < 11) return  0
+    if(quantity > 10 && quantity < 51) return 25
+    if(quantity > 50 && quantity < 101) return 50
+    if(quantity > 100 && quantity < 151) return 75
+    if(quantity > 150) return 100
 }
 
-if (!transportRisk && !roadsRisk) transportRisk = true
+countPoints_probability = assignProbabilityPoints(regularCart)
 
-if (transportRisk)  { 
-    roadsRisk = false
-    runAutotransportMainScope()    
-    execution.setVariable("riskCategory", AUTOTRANSPORT_risk_category);
+
+function assignConscientiousnessPoints(quantity) {
+    if(quantity === 0) return 0
+    if(quantity === 1) return 100
 }
 
-if (roadsRisk)  {
-    transportRisk = false
-    runRoadMainScope()    
-    execution.setVariable("riskCategory", ROADS_risk_category);
+countPoints_conscientiousness = assignConscientiousnessPoints(insurance)
+
+
+function calculationSeverityRisk (s, cs) { return risk_severity = s * cs }
+calculationSeverityRisk(coeff_severity, countPoints_severity)
+
+function calculationProbabilityRisk (p, r) { return risk_probability = p * r }
+calculationProbabilityRisk(coeff_probability, countPoints_probability)
+
+function calculationConscientiousnessRisk (c, i) { return risk_conscientiousness = c * i }
+calculationConscientiousnessRisk(coeff_conscientiousness, countPoints_conscientiousness)
+
+function calculationGlobalRiskTransport (s, p, c) {
+    var globalRisk = s + p + c 
+    if(globalRisk > 75)  return highRisk
+    if(globalRisk  > 49 && globalRisk <= 75 ) return middleRisk
+    if(globalRisk  < 50  ) return lowRisk
 }
+
+
+AUTOTRANSPORT_risk_category = calculationGlobalRiskTransport(
+    risk_severity, 
+    risk_probability, 
+    risk_conscientiousness
+    ) 
+
+riskCategory = AUTOTRANSPORT_risk_category 
+execution.setVariable("riskCategory", riskCategory); 
+
+
+// function calculationGlobalRiskRoad (s, p) {
+//     if ((s === "A" || s === "B") && p === 1) return highRisk
+//     if ((s === "A" || s === "B") && p === 2) return significantRisk
+//     if ((s === "A" && p > 2) || (s === "B" && p === 3)) return middleRisk
+//     if (s === "B" && p === 4) return lowRisk
+// }
+
+// ROADS_risk_category = calculationGlobalRiskRoad(
+//     groupSeverity, 
+//     groupProbability
+//     )
+
+// if (!transportRisk && !roadsRisk) transportRisk = true
+
+// if (transportRisk)  { 
+//     roadsRisk = false
+// }
+
+
+// riskCategory = ROADS_risk_category 
+
+// if (roadsRisk)  {
+//     transportRisk = false
+// }
