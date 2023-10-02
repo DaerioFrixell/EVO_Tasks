@@ -1,11 +1,11 @@
-var object = execution.getVariable("object")
-var block = object
-	.prop("entitiesKndKnoData")
-	.elements()
-	.get(0)
-	.prop("regionalAdditionalData")
-	.prop("form")
-	.prop("block")
+// var object = execution.getVariable("object")
+// var block = object
+// 	.prop("entitiesKndKnoData")
+// 	.elements()
+// 	.get(0)
+// 	.prop("regionalAdditionalData")
+// 	.prop("form")
+// 	.prop("block")
 
 var riskCategory
 var highCategory = 1
@@ -13,11 +13,11 @@ var middleCategory = 2
 var lowCategory = 3
 
 var M1 = 0
-var M2 = 4
+var M2 = 0
 
-var N1 = 2
+var N1 = 0
 var Z1 = 0
-var N2 = 2
+var N2 = 0
 
 var P1 = ""
 var P2 = ""
@@ -74,7 +74,7 @@ try {
 	P9 = block.prop("P9").value()
 } catch (error) {}
 
-var k = N1 / Z1 // проверка деления на 0, норм формулы присылают :D
+var k = N1 / Z1 // проверка деления на 0, норм формулы присылают
 if (Z1 === 0) k = 0
 
 var Rt = 20 * M1 + 5 * M2
@@ -88,3 +88,5 @@ if (biggestValue >= 7 && Rt <= 14) riskCategory = middleCategory
 if (biggestValue <= 6) riskCategory = lowCategory
 
 // execution.setVariable("riskCategory", riskCategory)
+
+console.log({ riskCategory, Rd, Rt, Rv })
