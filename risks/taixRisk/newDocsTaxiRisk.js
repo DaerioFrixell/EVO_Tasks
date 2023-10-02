@@ -1,13 +1,22 @@
+var object = execution.getVariable("object")
+var block = object
+	.prop("entitiesKndKnoData")
+	.elements()
+	.get(0)
+	.prop("regionalAdditionalData")
+	.prop("form")
+	.prop("block")
+
+var riskCategory
 var highCategory = 1
 var middleCategory = 2
 var lowCategory = 3
-var riskCategory
 
 var M1 = 0
 var M2 = 4
 
 var N1 = 2
-var Z = 0
+var Z1 = 0
 var N2 = 2
 
 var P1 = ""
@@ -31,7 +40,7 @@ try {
 	N1 = block.prop("N1").value()
 } catch (error) {}
 try {
-	Z = block.prop("Z").value()
+	Z1 = block.prop("Z1").value()
 } catch (error) {}
 try {
 	N2 = block.prop("N2").value()
@@ -65,8 +74,8 @@ try {
 	P9 = block.prop("P9").value()
 } catch (error) {}
 
-var k = N1 / Z // проверка деления на 0, норм формулы присылают :D
-if (Z === 0) k = 0
+var k = N1 / Z1 // проверка деления на 0, норм формулы присылают :D
+if (Z1 === 0) k = 0
 
 var Rt = 20 * M1 + 5 * M2
 var Rv = 200 * k + 5 * N2
