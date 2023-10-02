@@ -1,0 +1,19 @@
+1 CASE:
+
+if (Rt > 0) {
+	return execution.setVariable("riskCategory", highCategory)
+}
+
+ошибка из-за return
+
+
+2 CASE:
+if (Rt > 0) {
+	execution.setVariable("riskCategory", highCategory)
+}
+
+it's work
+
+
+3 CASE:
+

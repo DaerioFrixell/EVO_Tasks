@@ -1,13 +1,15 @@
-// var object = execution.getVariable("object")
-// var block = object
-// 	.prop("entitiesKndKnoData")
-// 	.elements()
-// 	.get(0)
-// 	.prop("regionalAdditionalData")
-// 	.prop("form")
-// 	.prop("block")
+var object = execution.getVariable("object")
+var block = object
+	.prop("entitiesKndKnoData")
+	.elements()
+	.get(0)
+	.prop("regionalAdditionalData")
+	.prop("form")
+	.prop("block")
 
-var riskCategory
+var riskCategory = null
+var biggestValue = null
+
 var highCategory = 1
 var middleCategory = 2
 var lowCategory = 3
@@ -18,6 +20,10 @@ var M2 = 0
 var N1 = 0
 var Z1 = 0
 var N2 = 0
+
+var Rt = 0
+var Rv = 0
+var Rd = 0
 
 var P1 = ""
 var P2 = ""
@@ -77,16 +83,27 @@ try {
 var k = N1 / Z1 // проверка деления на 0, норм формулы присылают
 if (Z1 === 0) k = 0
 
-var Rt = 20 * M1 + 5 * M2
-var Rv = 200 * k + 5 * N2
-var Rd = 4 * (9 - +P1 - +P2 - +P3 - +P4 - +P5 - +P6 - +P7 - +P8 - +P9)
+function calculateValue() {
+	Rt = 20 * M1 + 5 * M2
+	Rv = 200 * k + 5 * N2
+	Rd = 4 * (9 - +P1 - +P2 - +P3 - +P4 - +P5 - +P6 - +P7 - +P8 - +P9)
 
-var biggestValue = Math.max(Rt, Rv, Rd)
+	return Math.max(Rt, Rv, Rd)
+}
 
-if (biggestValue >= 15) riskCategory = highCategory
-if (biggestValue >= 7 && Rt <= 14) riskCategory = middleCategory
-if (biggestValue <= 6) riskCategory = lowCategory
+var biggestValue = calculateValue()
 
-// execution.setVariable("riskCategory", riskCategory)
+execution.setVariable("biggestValue", biggestValue)
+execution.setVariable("Rt", Rt)
+execution.setVariable("Rv", Rv)
+execution.setVariable("Rd", Rd)
 
-console.log({ riskCategory, Rd, Rt, Rv })
+if (biggestValue >= 15) {
+	execution.setVariable("riskCategory", highCategory)
+}
+if (biggestValue >= 7 && biggestValue <= 14) {
+	execution.setVariable("riskCategory", middleCategory)
+}
+if (biggestValue <= 6) {
+	execution.setVariable("riskCategory", lowCategory)
+}
