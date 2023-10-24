@@ -16,4 +16,18 @@ it's work
 
 
 3 CASE:
+var riskCategory | var riskCategory = anything
+execution.setVariable("riskCategory", highCategory) 
+
+ошибка, т.к. riskCategory будет объект и ему нельзя будет присвоить значение. Хз что за бред
+
+
+4 CASE:
+var riskCategory;
+riskCategory = anything
+execution.setVariable("riskCategory", riskCategory) 
+
+it's work
+
+
 

@@ -7,8 +7,8 @@ var block = object
 	.prop("form")
 	.prop("block")
 
-var riskCategory = null
-var biggestValue = null
+var riskCategory;
+var biggestValue;
 
 var highCategory = 1
 var middleCategory = 2
@@ -34,6 +34,7 @@ var P6 = ""
 var P7 = ""
 var P8 = ""
 var P9 = ""
+
 
 try {
 	M1 = block.prop("M1").value()
@@ -80,30 +81,47 @@ try {
 	P9 = block.prop("P9").value()
 } catch (error) {}
 
-var k = N1 / Z1 // проверка деления на 0, норм формулы присылают
-if (Z1 === 0) k = 0
+var k = 0;
+
+// проверка деления на 0
+if (Number(Z1) === 0) {
+  k = 0;
+} else {
+  k = N1 / Z1;
+}
 
 function calculateValue() {
-	Rt = 20 * M1 + 5 * M2
-	Rv = 200 * k + 5 * N2
-	Rd = 4 * (9 - +P1 - +P2 - +P3 - +P4 - +P5 - +P6 - +P7 - +P8 - +P9)
-
-	return Math.max(Rt, Rv, Rd)
+	Rt = 20 * M1 + 5 * M2;
+	Rv = 200 * k + 5 * N2;
+	Rd = 4 * (9 - +P1 - +P2 - +P3 - +P4 - +P5 - +P6 - +P7 - +P8 - +P9);
+	var biggestIndex = Math.max(Rt, Rv, Rd);
+	var numberBiggestIndex = Number(biggestIndex)
+	
+	execution.setVariable("biggestIndex", biggestIndex)
+	execution.setVariable("numberBiggestIndex", numberBiggestIndex)
+	return numberBiggestIndex;
 }
 
 var biggestValue = calculateValue()
+var a = Number(biggestValue)
 
 execution.setVariable("biggestValue", biggestValue)
-execution.setVariable("Rt", Rt)
-execution.setVariable("Rv", Rv)
-execution.setVariable("Rd", Rd)
+riskCategory = 0;
+
+execution.setVariable("riskCategoryBefore", riskCategory)
 
 if (biggestValue >= 15) {
-	execution.setVariable("riskCategory", highCategory)
+	riskCategory = highCategory
+	execution.setVariable("riskCategory", riskCategory)
 }
 if (biggestValue >= 7 && biggestValue <= 14) {
-	execution.setVariable("riskCategory", middleCategory)
+	riskCategory = middleCategory
+	execution.setVariable("riskCategory", riskCategory)
 }
-if (biggestValue <= 6) {
-	execution.setVariable("riskCategory", lowCategory)
+if (biggestValue <= 6 || biggestValue === 0) {
+	riskCategory = lowCategory
+	execution.setVariable("riskCategory", riskCategory)
 }
+
+execution.setVariable("riskCategoryAfter", riskCategory)
+
