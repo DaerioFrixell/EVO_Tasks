@@ -7,19 +7,10 @@ var block = object
 	.prop("form")
 	.prop("block")
 
-var AUTOTRANSPORT_risk_category = null
-var ROADS_risk_category = null
-var globalRisk = null
-var riskCategory = null
-
-var highRisk = 1
-var significantRisk = 2
-var middleRisk = 3
-var lowRisk = 4
-
-var coeff_severity = 0.5
-var coeff_probability = 0.25
-var coeff_conscientiousness = 0.25
+var AUTOTRANSPORT_risk_category;
+var ROADS_risk_category;
+var globalRisk;
+var riskCategory;
 
 var risk_severity = null
 var risk_probability = null
@@ -35,20 +26,12 @@ var insurance = 0
 var groupSeverity = ""
 var groupProbability = ""
 
-// checkboxes
-var transportRisk = false
-var roadsRisk = false
+var chooseRisk;
 
 try {
-	transportRisk = block.prop("transportRisk").value()
+	chooseRisk = block.prop("chooseRisk").value()
 } catch (error) {}
 
-try {
-	transportRisk = block.prop("transportRisk").value()
-} catch (error) {}
-try {
-	roadsRisk = block.prop("roadsRisk").value()
-} catch (error) {}
 try {
 	dtpCount = block.prop("dtpCount").value()
 } catch (error) {}
@@ -66,56 +49,70 @@ try {
 } catch (error) {}
 
 // расчёт рисков - ТРАНСПОРТ
-// count balls for severity
+
+// количество баллов для severity
 if (dtpCount === 0) countPoints_severity = 0
 if (dtpCount === 1 || dtpCount === 2) countPoints_severity = 25
 if (dtpCount === 3 || dtpCount === 4) countPoints_severity = 50
 if (dtpCount === 5 || dtpCount === 6) countPoints_severity = 75
 if (dtpCount > 6) countPoints_severity = 100
 
-// count balls for probability
+// количество баллов для probability
 if (regularCart < 11) countPoints_probability = 0
 if (regularCart > 10 && regularCart < 51) countPoints_probability = 25
 if (regularCart > 50 && regularCart < 101) countPoints_probability = 50
 if (regularCart > 100 && regularCart < 151) countPoints_probability = 75
 if (regularCart > 150) countPoints_probability = 100
 
-// count balls for conscientiousness
-if (insurance === 0) countPoints_conscientiousness = 0
-if (insurance === 1) countPoints_conscientiousness = 100
+// количество баллов для conscientiousness
+if (insurance === '0') countPoints_conscientiousness = 0
+if (insurance === '1') countPoints_conscientiousness = 100
+
+var coeff_severity = 0.5
+var coeff_probability = 0.25
+var coeff_conscientiousness = 0.25
 
 function calculationSeverityRisk(s, cs) {
-	return (risk_severity = s * cs)
+	risk_severity = s * cs
 }
-calculationSeverityRisk(coeff_severity, countPoints_severity)
 
 function calculationProbabilityRisk(p, r) {
-	return (risk_probability = p * r)
+	risk_probability = p * r
 }
-calculationProbabilityRisk(coeff_probability, countPoints_probability)
 
 function calculationConscientiousnessRisk(c, i) {
-	return (risk_conscientiousness = c * i)
+	risk_conscientiousness = c * i
 }
+
+calculationSeverityRisk(coeff_severity, countPoints_severity)
+calculationProbabilityRisk(coeff_probability, countPoints_probability)
 calculationConscientiousnessRisk(coeff_conscientiousness, countPoints_conscientiousness)
 
+//присвоение риска в middleware
+var highRisk = 1
+var significantRisk = 2
+var middleRisk = 3
+var lowRisk = 4
+
 var globalRisk = risk_severity + risk_probability + risk_conscientiousness
+
 if (globalRisk > 75) AUTOTRANSPORT_risk_category = highRisk
 if (globalRisk > 49 && globalRisk <= 75) AUTOTRANSPORT_risk_category = middleRisk
 if (globalRisk < 50) AUTOTRANSPORT_risk_category = lowRisk
 
+
 // расчёт рисков - ДОРОГИ
+
 if ((groupSeverity === "A" || groupSeverity === "B") && groupProbability === "1") {
 	ROADS_risk_category = highRisk
 }
 if ((groupSeverity === "A" || groupSeverity === "B") && groupProbability === "2") {
 	ROADS_risk_category = significantRisk
 }
-if ((groupSeverity === "A" && groupProbability === "2") || (groupSeverity === "B" && groupProbability === "3")) {
-	ROADS_risk_category = middleRisk
-}
-
-if ((groupSeverity === "A" && groupProbability === "3") || (groupSeverity === "B" && groupProbability === "3")) {
+if (
+	(groupSeverity === "A" && (groupProbability === "3" || groupProbability === "4")) 
+	|| (groupSeverity === "B" && groupProbability === "3")
+	) {
 	ROADS_risk_category = middleRisk
 }
 
@@ -123,16 +120,13 @@ if (groupSeverity === "B" && groupProbability === "4") {
 	ROADS_risk_category = lowRisk
 }
 
-// управление чекбоксами
-if (!transportRisk && !roadsRisk) {
-	roadsRisk = true
+// присвоение риска для выбранного расчёта риска в переменную для DMN
+if (chooseRisk === "1") {
+	riskCategory = AUTOTRANSPORT_risk_category
+  execution.setVariable("riskCategory", riskCategory)
 }
 
-if (transportRisk) {
-	roadsRisk = false
-	execution.setVariable("riskCategory", AUTOTRANSPORT_risk_category)
-}
-
-if (roadsRisk) {
-	execution.setVariable("riskCategory", ROADS_risk_category)
+if (chooseRisk === "0") {
+	riskCategory = ROADS_risk_category	
+  execution.setVariable("riskCategory", riskCategory)
 }
