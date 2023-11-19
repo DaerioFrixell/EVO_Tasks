@@ -1,0 +1,10 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.container {
+    padding: 5vh 20vw;
+    background-color: rgba(49, 93, 49, 0.68);
+}
