@@ -1,3 +1,4 @@
+db.getCollection("nfapRepositorylicenses").find({"subject.data.organization.guid": {$exists: false}}).limit(15).forEach(function(license) {
   if(license.subject) {        
        var subject = license.subject;
        
