@@ -1,0 +1,17 @@
+current Nodejs: 
+Nodejs         18.18.0
+
+version for pet projects:
+Angular CLI   ~16.0.0
+Angular       ~16.0.0
+Node.js       ^16.13.0 || ^18.10.0
+TypeScript    >=4.9.5 <5.1.0
+RxJS          ^6.5.5 || ^7.4.0
+
+
+version for Evolenta:
+Angular CLI   ~8.2.2 || ~8.3.29
+Angular       ~8.2.14
+Node.js       ^10.9.0
+TypeScript    ~3.4.5 || ~3.5.3
+RxJS          ^6.4.0
