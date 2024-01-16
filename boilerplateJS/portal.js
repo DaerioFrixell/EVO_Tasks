@@ -1,14 +1,16 @@
 // exm. for use React.Portal  
 
 export const SomeComponent = () => {
+  const { isOpen, toggle } = useToggle();
+
   return (
     <>
-      <button onClick={toggle}>add unit</button>
+      <button onClick={toggle}>click it</button>
       {
         isOpen &&
         createPortal(
-          <Modal toggle={toggle} title="добавление unit">
-            <UnitForm />
+          <Modal toggle={toggle} title="some title">
+            <AnyComponent />
           </Modal>,
           document.body
         )

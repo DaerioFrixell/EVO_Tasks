@@ -16,7 +16,7 @@ it's work
 
 
 3 CASE:
-var riskCategory | var riskCategory = anything
+var riskCategory | var riskCategory = anything // это не "или", а визуальное разделение.
 execution.setVariable("riskCategory", highCategory) 
 
 ошибка, т.к. riskCategory будет объект и ему нельзя будет присвоить значение. Хз что за бред
@@ -28,8 +28,3 @@ riskCategory = anything
 execution.setVariable("riskCategory", riskCategory) 
 
 it's work
-
-
-5 CASE
-
-
