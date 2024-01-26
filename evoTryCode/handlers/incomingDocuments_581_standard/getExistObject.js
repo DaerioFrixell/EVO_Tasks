@@ -1,9 +1,5 @@
-/**
- * аргументы функций: internalHandlerData, appeal.
- * внутренняя функция: searchInDB.
- * когда используется searchInDB, то она создаёт посковой объект, если такой не был найден в БД.
- * internalHandlerData - в него будет записан результат вызова searchInDB.
- */
+// аргументы функций: internalHandlerData, appeal.
+// внутренняя функция: searchInDB.
 
 if (internalHandlerData.length > 1) {
   appeal.validationErrors = [];

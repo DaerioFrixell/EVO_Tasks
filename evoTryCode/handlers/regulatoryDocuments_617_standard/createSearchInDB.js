@@ -1,4 +1,4 @@
-//arg: appeal
+//arg: appeal.
 
 const doctype1 = "Приказ по основной деятельности (ОД)";
 const doctype2 = "Приказ по служебным проверкам (СП)";
@@ -54,6 +54,4 @@ if (appeal.inputNumber && appeal.inputBlocknum) {
       }
     }
   }
-
-  console.log("ap: ", appeal)
 }

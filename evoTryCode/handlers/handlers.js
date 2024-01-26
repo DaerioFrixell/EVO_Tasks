@@ -42,11 +42,17 @@ appeal.searchInDB = {
  * - внутренняя функция, которая осуществляет поиск в БД.
  * - должна вызываться "на завершение", после того, как будет создан объект appeal.searchInDB.
  * - результат функции будет храниться в internalHandlerData().
+ * - searchInDB, создаёт посковой объект, если такой не был найден в БД. (wtf)
  */
 function searchInDB() { }
 
 /**
- * - internalHandlerData хранит данные после вызова внутренней функции searchInDB.
+ * - аргумент internalHandlerData хранит данные после вызова внутренней функции searchInDB.
  * - другие функции сюда же кидаю результат вроде как. Не тестил еще.
  */
 function internalHandlerData() { }
+
+/** TO DO: добавить описание.
+ * - аргумент appeal
+ */
+function appeal() { }
