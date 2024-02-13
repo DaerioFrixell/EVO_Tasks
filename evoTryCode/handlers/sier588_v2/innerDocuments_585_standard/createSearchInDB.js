@@ -4,7 +4,7 @@ if (appeal) {
   const currentNumber = appeal.subservices[0].xsdData.parentAdministrative.appeal_number;
 
   appeal.searchInDB = {
-    collectionName: 'incomingDocumentsAppeals',
+    collectionName: 'innerDocumentsAppeals',
     params: {
       search: {
         "search": [{

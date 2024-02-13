@@ -9,11 +9,9 @@ if (appeal) {
   if (internalHandlerData) {
     // Проверка уникальности номера. SearchInDb создаёт поисковый элемент, поэтому длина массива всегда будет минимум 1.
     if (internalHandlerData.length > 1) {
-      const blocknum = appeal.inputBlocknum;
-      const numAppeal = appeal.inputNumber;
+      const numAppeal = appeal.subservices[0].xsdData.parentAdministrative.appeal_number;
 
-      const parAdIHD = internalHandlerData[0].subservices[0].xsdData.parentAdministrative;
-      const numIHD = parAdIHD[blocknum].appeal_number;
+      const numIHD = internalHandlerData[0].subservices[0].xsdData.parentAdministrative.appeal_number;
 
       // При изменении вписанного номера нужно "сохранить" дело, чтоб подтянулся новый номер
       if (numAppeal !== numIHD) {
@@ -32,3 +30,8 @@ if (appeal) {
     appeal.validationWarning = ['Завершена проверка номера. Нажмите на "Регистрацию".'];
   }
 }
+
+// internal-handlers.service.ts
+// internal-handlers.type.ts
+// toaster-host.component.html
+// common-appeal-actions.component
