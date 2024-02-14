@@ -7,6 +7,7 @@ if (appeal) {
 
   // Проверка отслеживает первое нажатие кнопки регистрации.
   if (internalHandlerData) {
+    console.log("int: ", internalHandlerData)
     // Проверка уникальности номера. SearchInDb создаёт поисковый элемент, поэтому длина массива всегда будет минимум 1.
     if (internalHandlerData.length > 1) {
       const blocknum = appeal.inputBlocknum;
