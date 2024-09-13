@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta charset="UTF-8" />
+    <title>learn JS</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+    <script src="./.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>LearnJS</h1>
+      <h2>сделать отдельный гитпроект для js практики</h2>
+    </div>
+
+    <button type="button" onclick="asd()">asd</button>
+
+    <script>
+      const arr = ["red", "green", "black", "yellow"];
+      let i = 0;
+
+      function asd() {
+        i++;
+        document.body.style.background = arr[i];
+
+        if (i === arr.length - 1) i = 0;
+      }
+    </script>
+  </body>
+</html>
