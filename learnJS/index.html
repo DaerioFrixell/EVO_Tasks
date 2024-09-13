@@ -5,24 +5,26 @@
     <meta charset="UTF-8" />
     <title>learn JS</title>
     <link rel="stylesheet" href="./css/styles.css" />
-    <script src="./.js"></script>
+    <!--       INSERT JS-FILE HERE      -->
+    <script src="./practice-001/fourSeasons.js"></script>
   </head>
 
   <body>
     <div class="container">
       <h1>LearnJS</h1>
-      <h2>сделать отдельный гитпроект для js практики</h2>
     </div>
 
-    <button type="button" onclick="asd()">asd</button>
+    <button type="button" onclick="changeColorOfBody()">
+      Изменить background для Body
+    </button>
 
     <script>
       const arr = ["red", "green", "black", "yellow"];
       let i = 0;
 
-      function asd() {
-        i++;
+      function changeColorOfBody() {
         document.body.style.background = arr[i];
+        i++;
 
         if (i === arr.length - 1) i = 0;
       }
