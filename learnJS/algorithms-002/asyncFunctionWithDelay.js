@@ -9,7 +9,7 @@ const delays = [2000, 1000, 3000];
 
 const runInOrder = function (functionsArray, delays) {
   (function loopIt(i) {
-    setTimeout(function () {
+    setTimeout(() => {
       functionsArray[i]();
 
       if (i < functionsArray.length - 1) loopIt(i + 1);
@@ -18,3 +18,12 @@ const runInOrder = function (functionsArray, delays) {
 };
 
 runInOrder(functionsArray, delays);
+
+const fn = (arr, dal) => {
+  (function loop(i) {
+    setTimeout(() => {
+      arr[i]();
+      if (i < arr.length) loop(i + 1);
+    }, dal[i]);
+  })(0);
+};
