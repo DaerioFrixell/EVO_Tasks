@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <meta charset="UTF-8" />
     <title>learn JS</title>
     <link rel="stylesheet" href="./css/styles.css" />
     <!--       INSERT JS-FILE HERE      -->
-    <script src="./algorithms-002/promiseDelay.js"></script>
+    <script src="./practice-001/arrayMethods.js"></script>
   </head>
 
   <body>
@@ -19,14 +18,14 @@
     </button>
 
     <script>
-      const arr = ["red", "green", "black", "yellow"];
+      const arr = ["red", "green", "black", "white"];
       let i = 0;
 
       function changeColorOfBody() {
         document.body.style.background = arr[i];
         i++;
 
-        if (i === arr.length - 1) i = 0;
+        if (i === arr.length) i = 0;
       }
     </script>
   </body>
