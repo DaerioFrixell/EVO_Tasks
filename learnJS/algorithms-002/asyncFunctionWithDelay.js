@@ -18,12 +18,3 @@ const runInOrder = function (functionsArray, delays) {
 };
 
 runInOrder(functionsArray, delays);
-
-const fn = (arr, dal) => {
-  (function loop(i) {
-    setTimeout(() => {
-      arr[i]();
-      if (i < arr.length) loop(i + 1);
-    }, dal[i]);
-  })(0);
-};

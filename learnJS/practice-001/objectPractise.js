@@ -1,17 +1,17 @@
 "use strict";
 
 let object1 = {
-  ключ1: 100,
+  key: 100,
   quentity: 2,
 };
 
 let object2 = {
-  ключ1: 10,
+  key: 10,
   quentity: 3,
 };
 
 let object3 = {
-  ключ1: 10,
+  key: 10,
   quentity: undefined,
 };
 
